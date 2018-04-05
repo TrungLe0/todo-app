@@ -1,0 +1,88 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+input:focus {
+  outline: none;
+}
+
+.container {
+  margin: auto;
+  padding: 30px 0;
+  text-align: center;
+  width: 960px;
+}
+
+.form {
+  margin: 15px 0;
+}
+
+.form h1 {
+  color: blue;
+  font-size: 40px;
+  padding: 10px;
+  text-transform: uppercase;
+}
+
+.form input {
+  border-style: groove;
+  font-size: 20px;
+  height: 40px;
+  padding: 5px 15px;
+  width: 40%;
+}
+
+.form button {
+  background-color: #74992e;
+  border: 0;
+  cursor: pointer;
+  font-size: 20px;
+  height: 40px;
+  margin: 15px auto;
+  width: 80px;
+}
+
+.form button.btn-clear {
+  background-color: #ff000080;
+}
+
+ul {
+  list-style: none;
+  margin: auto;
+  text-align: left;
+  width: 75%;
+}
+
+ul li {
+  font-size: 20px;
+  padding: 15px 40px;
+  position: relative;
+}
+
+ul li.checked {
+  background-color: #dcdcdc;
+  text-decoration: line-through;
+}
+
+ul li.checked span {
+  display: none;
+}
+
+ul li.checked::before {
+  content: '\f00c';
+  font-family: FontAwesome;
+  left: 10px;
+  position: absolute;
+  top: 15px;
+}
+
+ul li:hover {
+  background-color: #5d9e5138;
+  cursor: pointer;
+}
+
+ul li .btn-remove {
+  color: '#f00';
+  float: right;
+}
