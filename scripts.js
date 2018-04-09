@@ -1,4 +1,12 @@
-var lstToDo = ['AngularJS', 'NodeJS', 'JavaScript']
+var data = [
+  { 'id': 1, 'name': 'AngularJS', 'checked': false},
+  { 'id': 2, 'name': 'NodeJs', 'checked': true},
+  { 'id': 3, 'name': 'Javascript', 'checked': false}]
+
+// store lstToDoArr into lstToDoStore
+var localStorage = window.localStorage
+var lstToDo = JSON.parse(localStorage.getItem('lstToDoStore'))
+if (lstToDo === null || lstToDo.length === 0) localStorage.setItem('lstToDoStore', JSON.stringify(data))
 
 // Create block result
 var ul = document.createElement('ul')
@@ -8,63 +16,76 @@ var list = document.querySelector('ul')
 
 for (var i = 0; i < lstToDo.length; i++) {
   createListResult(lstToDo[i])
-  removeItem()
+  // removeItem()
 }
 
 // Create item
 function createListResult (item) {
   if (item) {
-    var btnRemove = '<span class="fa fa-trash-o btn-remove" aria-hidden="true"></span>'
+    var chClass = ['fa fa-check'].join(' ')
+    if (item['checked']) chClass += ' checked'
+    var btnCheck = '<span class="' + chClass + '" aria-hidden="true"></span>'
+    var btnRemove = '<span class="fa fa-trash-o btn-remove" onclick="deleteItemById(' + item.id + ')" aria-hidden="true"></span>'
     var lstItem = document.createElement('li')
-    lstItem.innerHTML = item + btnRemove
+    lstItem.innerHTML = btnCheck + item['name'] + btnRemove
+    lstItem.onclick = () => {
+      updateItemById(item.id)
+    }
     list.appendChild(lstItem)
   }
 }
 
 var myText = document.getElementById('myText')
 function addItem () {
-  // lstToDo.push(myText.value);
-  createListResult(myText.value.trim())
+  var id = lstToDo.length + 1
+  var newToDo = {'id': id, 'name': myText.value.trim(), 'checked': false}
+  lstToDo.push(newToDo)
+  createListResult(newToDo)
+  localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
   myText.value = ''
-  removeItem()
+  removeList = document.getElementsByClassName('btn-remove')
+  // removeItem()
 }
 
-// remove item access to lstToDo
-
-// function removeByValue(val){
-//   for (var i = 0; i < lstToDo.length; i++) {
-//     if(lstToDo[i] === val) {
-//       lstToDo.splice(i,1);
-//       i--;
-//     }
-//   }
-//   return lstToDo;
-// }
 //
-// function deleteItem(item){
-//   removeByValue(item.textContent);
-// }
+function deleteItemById (idTodo) {
+  lstToDo.forEach((item, index) => {
+    if (item['id'] === idTodo) lstToDo.splice(index, 1)
+  })
+  localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
+}
+
+function updateItemById (id) {
+  lstToDo.forEach((item) => {
+    if (item['id'] === id) item['checked'] = !item['checked']
+  })
+  localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
+}
 
 // Remove Item
-function removeItem () {
-  var del = document.getElementsByClassName('btn-remove')
-  for (var i = 0; i < del.length; i++) {
-    del[i].onclick = function () {
-      var itemDel = this.parentElement
-      itemDel.style.display = 'none'
-    }
-  }
-}
+// function removeItem () {
+//   var del = document.getElementsByClassName('btn-remove')
+//   for (var i = 0; i < del.length; i++) {
+//     del[i].onclick = function () {
+//       var itemDel = this.parentElement
+//       itemDel.style.display = 'none'
+//     }
+//   }
+// }
 
 // Check item is DONE
-list.addEventListener('click', function (ev) {
-  if (ev.target.tagName === 'LI') {
-    ev.target.classList.toggle('checked')
-  }
+list.addEventListener('click', (ev) => {
+  if (ev.target.tagName === 'LI') ev.target.children[0].classList.toggle('checked')
 })
 
-myText.addEventListener('keypress', function (ev) {
-  if (ev.keyCode === 13) { // is enter
-    addItem()
-  }
+myText.addEventListener('keypress', (ev) => {
+  // is enter
+  if (ev.keyCode === 13) addItem()
 })
+
+var removeList = document.getElementsByClassName('btn-remove')
+for (let i = 0; i < removeList.length; i++) {
+  removeList[i].addEventListener('click', () => {
+    this.parentElement.style.display = 'none'
+  })
+}

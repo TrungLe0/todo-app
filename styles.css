@@ -11,7 +11,6 @@ input:focus {
   margin: auto;
   padding: 30px 0;
   text-align: center;
-  width: 960px;
 }
 
 .form {
@@ -19,9 +18,8 @@ input:focus {
 }
 
 .form h1 {
-  color: blue;
+  /* color: blue; */
   font-size: 40px;
-  padding: 10px;
   text-transform: uppercase;
 }
 
@@ -30,12 +28,12 @@ input:focus {
   font-size: 20px;
   height: 40px;
   padding: 5px 15px;
-  width: 40%;
+  border: 1px solid;
 }
 
 .form button {
-  background-color: #74992e;
-  border: 0;
+  background-color: #fff;
+  border: 1px solid;
   cursor: pointer;
   font-size: 20px;
   height: 40px;
@@ -44,45 +42,69 @@ input:focus {
 }
 
 .form button.btn-clear {
-  background-color: #ff000080;
+  background-color: #000;
+  color: #fff;
 }
 
 ul {
   list-style: none;
   margin: auto;
+  padding: 15px;
   text-align: left;
-  width: 75%;
 }
 
 ul li {
   font-size: 20px;
-  padding: 15px 40px;
+  padding: 15px;
   position: relative;
 }
 
-ul li.checked {
-  background-color: #dcdcdc;
-  text-decoration: line-through;
-}
-
-ul li.checked span {
+ul li span:first-child {
   display: none;
 }
 
-ul li.checked::before {
-  content: '\f00c';
-  font-family: FontAwesome;
+/* ul li span.checked {
+  background-color: #dcdcdc;
+  text-decoration: line-through;
+} */
+
+ul li span.checked {
+  display: block;
   left: 10px;
   position: absolute;
   top: 15px;
 }
 
 ul li:hover {
-  background-color: #5d9e5138;
+  background-color: #000;
   cursor: pointer;
+  color: #fff;
 }
 
 ul li .btn-remove {
   color: '#f00';
   float: right;
+}
+
+/* For repsonsive */
+@media (min-width: 780px) {
+  .container {
+    width: 80%;
+  }
+
+  .form h1 {
+    padding: 10px;
+  }
+
+  .form input {
+    width: 40%;
+  }
+
+  ul {
+    width: 75%;
+  }
+
+  ul li {
+    padding: 15px 40px;
+  }
 }
