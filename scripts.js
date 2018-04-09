@@ -3,10 +3,16 @@ var data = [
   { 'id': 2, 'name': 'NodeJs', 'checked': true},
   { 'id': 3, 'name': 'Javascript', 'checked': false}]
 
-// store lstToDoArr into lstToDoStore
+
 var localStorage = window.localStorage
+// store for genera id
+if (!localStorage.getItem('storeId')) localStorage.setItem('storeId', 4)
+// store lstToDoArr into lstToDoStore
 var lstToDo = JSON.parse(localStorage.getItem('lstToDoStore'))
-if (lstToDo === null || lstToDo.length === 0) localStorage.setItem('lstToDoStore', JSON.stringify(data))
+if (lstToDo === null || lstToDo.length === 0) {
+  localStorage.setItem('lstToDoStore', JSON.stringify(data))
+  lstToDo = JSON.parse(localStorage.getItem('lstToDoStore'))
+}
 
 // Create block result
 var ul = document.createElement('ul')
@@ -14,9 +20,11 @@ var result = document.querySelector('.result')
 result.appendChild(ul)
 var list = document.querySelector('ul')
 
-for (var i = 0; i < lstToDo.length; i++) {
-  createListResult(lstToDo[i])
-  // removeItem()
+if (lstToDo) {
+  for (var i = 0; i < lstToDo.length; i++) {
+    createListResult(lstToDo[i])
+    // removeItem()
+  }
 }
 
 // Create item
@@ -37,7 +45,8 @@ function createListResult (item) {
 
 var myText = document.getElementById('myText')
 function addItem () {
-  var id = lstToDo.length + 1
+  var id = Number(localStorage.getItem('storeId')) + 1
+  localStorage.setItem('storeId', id)
   var newToDo = {'id': id, 'name': myText.value.trim(), 'checked': false}
   lstToDo.push(newToDo)
   createListResult(newToDo)
@@ -86,6 +95,6 @@ myText.addEventListener('keypress', (ev) => {
 var removeList = document.getElementsByClassName('btn-remove')
 for (let i = 0; i < removeList.length; i++) {
   removeList[i].addEventListener('click', () => {
-    this.parentElement.style.display = 'none'
+    removeList[i].parentElement.style.display = 'none'
   })
 }
