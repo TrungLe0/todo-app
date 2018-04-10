@@ -44,13 +44,15 @@ function createListResult (item) {
 
 var myText = document.getElementById('myText')
 function addItem () {
-  var id = Number(localStorage.getItem('storeId')) + 1
-  localStorage.setItem('storeId', id)
-  var newToDo = {'id': id, 'name': myText.value.trim(), 'checked': false}
-  lstToDo.push(newToDo)
-  createListResult(newToDo)
-  localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
-  myText.value = ''
+  if (myText.value.trim()) {
+    var id = Number(localStorage.getItem('storeId')) + 1
+    localStorage.setItem('storeId', id)
+    var newToDo = {'id': id, 'name': myText.value.trim(), 'checked': false}
+    lstToDo.push(newToDo)
+    createListResult(newToDo)
+    localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
+    myText.value = ''
+  }
 }
 
 function deleteItemById (idTodo) {
