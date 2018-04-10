@@ -23,7 +23,7 @@ function init () {
 }
 
 function firstLoadTodo () {
-  var angular = new Todo (idTodo, 'AngularJS', false)
+  var angular = new Todo(idTodo, 'AngularJS', false)
   todos.push(angular)
   var key = 'todo' + idTodo
   localStorage.setItem(key, JSON.stringify(angular))
@@ -73,7 +73,7 @@ function addItem () {
   if (myText.value.trim()) {
     var id = Number(localStorage.getItem('storeId')) + 1
     localStorage.setItem('storeId', id)
-    var newToDo = new Todo (id, myText.value.trim(), false)
+    var newToDo = new Todo(id, myText.value.trim(), false)
     todos.push(newToDo)
     addTodoToPage(newToDo)
     var key = 'todo' + id
