@@ -1,35 +1,61 @@
-var data = [
-  {'id': 1, 'name': 'AngularJS', 'checked': false},
-  {'id': 2, 'name': 'NodeJs', 'checked': true},
-  {'id': 3, 'name': 'Javascript', 'checked': false}]
-
-var localStorage = window.localStorage
-// store for genera id
-if (!localStorage.getItem('storeId')) localStorage.setItem('storeId', 4)
-// store lstToDoArr into lstToDoStore
-var lstToDo = JSON.parse(localStorage.getItem('lstToDoStore'))
-if (lstToDo === null || lstToDo.length === 0) {
-  localStorage.setItem('lstToDoStore', JSON.stringify(data))
-  lstToDo = JSON.parse(localStorage.getItem('lstToDoStore'))
+function Todo (id, name, check) {
+  this.id = id
+  this.name = name
+  this.check = check
 }
 
-// Create block result
+var todos = []
+
+window.onload = init
+var localStorage = window.localStorage
+
 var ul = document.createElement('ul')
 var result = document.querySelector('.result')
 result.appendChild(ul)
 var list = document.querySelector('ul')
 
-if (lstToDo) {
-  for (var i = 0; i < lstToDo.length; i++) {
-    createListResult(lstToDo[i])
+// store for genera id
+if (!localStorage.getItem('storeId')) localStorage.setItem('storeId', 1)
+var idTodo = localStorage.getItem('storeId')
+
+function init () {
+  getTodoItems()
+}
+
+function firstLoadTodo () {
+  var angular = new Todo (idTodo, 'AngularJS', false)
+  todos.push(angular)
+  var key = 'todo' + idTodo
+  localStorage.setItem(key, JSON.stringify(angular))
+}
+
+function getTodoItems () {
+  if (localStorage) {
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i)
+      if (key.substring(0, 4) === 'todo') {
+        var item = JSON.parse(localStorage.getItem(key))
+        todos.push(item)
+      }
+    }
+    if (todos.length === 0) firstLoadTodo()
+  }
+  addTodosToPage()
+}
+
+function addTodosToPage () {
+  if (todos) {
+    for (var i = 0; i < todos.length; i++) {
+      addTodoToPage(todos[i])
+    }
   }
 }
 
 // Create item
-function createListResult (item) {
+function addTodoToPage (item) {
   if (item) {
     var chClass = ['fa fa-check'].join(' ')
-    if (item['checked']) chClass += ' checked'
+    if (item['check']) chClass += ' checked'
     var btnCheck = '<span class="' + chClass + '" aria-hidden="true"></span>'
     var btnRemove = '<span class="fa fa-trash-o btn-remove" onclick="deleteItemById(' + item.id + ')" aria-hidden="true"></span>'
     var lstItem = document.createElement('li')
@@ -47,29 +73,27 @@ function addItem () {
   if (myText.value.trim()) {
     var id = Number(localStorage.getItem('storeId')) + 1
     localStorage.setItem('storeId', id)
-    var newToDo = {'id': id, 'name': myText.value.trim(), 'checked': false}
-    lstToDo.push(newToDo)
-    createListResult(newToDo)
-    localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
+    var newToDo = new Todo (id, myText.value.trim(), false)
+    todos.push(newToDo)
+    addTodoToPage(newToDo)
+    var key = 'todo' + id
+    localStorage.setItem(key, JSON.stringify(newToDo))
     myText.value = ''
   }
 }
 
-function deleteItemById (idTodo) {
-  Array.from(lstToDo).forEach((item, index) => {
-    if (item['id'] === idTodo) {
-      lstToDo.splice(index, 1)
-      document.getElementById(item.id).style.display = 'none'
-    }
-  })
-  localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
+function deleteItemById (id) {
+  localStorage.removeItem('todo' + id)
+  document.getElementById(id).style.display = 'none'
 }
 
 function updateItemById (id) {
-  Array.from(lstToDo).forEach((item) => {
-    if (item['id'] === id) item['checked'] = !item['checked']
-  })
-  localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
+  var key = 'todo' + id
+  var todoUpdate = JSON.parse(localStorage.getItem(key))
+  if (todoUpdate) {
+    todoUpdate['check'] = !todoUpdate['check']
+    localStorage.setItem('todo' + id, JSON.stringify(todoUpdate))
+  }
 }
 
 // Check item is DONE
