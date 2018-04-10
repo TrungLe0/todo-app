@@ -1,8 +1,7 @@
 var data = [
-  { 'id': 1, 'name': 'AngularJS', 'checked': false},
-  { 'id': 2, 'name': 'NodeJs', 'checked': true},
-  { 'id': 3, 'name': 'Javascript', 'checked': false}]
-
+  {'id': 1, 'name': 'AngularJS', 'checked': false},
+  {'id': 2, 'name': 'NodeJs', 'checked': true},
+  {'id': 3, 'name': 'Javascript', 'checked': false}]
 
 var localStorage = window.localStorage
 // store for genera id
@@ -23,7 +22,6 @@ var list = document.querySelector('ul')
 if (lstToDo) {
   for (var i = 0; i < lstToDo.length; i++) {
     createListResult(lstToDo[i])
-    // removeItem()
   }
 }
 
@@ -35,6 +33,7 @@ function createListResult (item) {
     var btnCheck = '<span class="' + chClass + '" aria-hidden="true"></span>'
     var btnRemove = '<span class="fa fa-trash-o btn-remove" onclick="deleteItemById(' + item.id + ')" aria-hidden="true"></span>'
     var lstItem = document.createElement('li')
+    lstItem.setAttribute('id', item.id)
     lstItem.innerHTML = btnCheck + item['name'] + btnRemove
     lstItem.onclick = () => {
       updateItemById(item.id)
@@ -52,35 +51,24 @@ function addItem () {
   createListResult(newToDo)
   localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
   myText.value = ''
-  removeList = document.getElementsByClassName('btn-remove')
-  // removeItem()
 }
 
-//
 function deleteItemById (idTodo) {
-  lstToDo.forEach((item, index) => {
-    if (item['id'] === idTodo) lstToDo.splice(index, 1)
+  Array.from(lstToDo).forEach((item, index) => {
+    if (item['id'] === idTodo) {
+      lstToDo.splice(index, 1)
+      document.getElementById(item.id).style.display = 'none'
+    }
   })
   localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
 }
 
 function updateItemById (id) {
-  lstToDo.forEach((item) => {
+  Array.from(lstToDo).forEach((item) => {
     if (item['id'] === id) item['checked'] = !item['checked']
   })
   localStorage.setItem('lstToDoStore', JSON.stringify(lstToDo))
 }
-
-// Remove Item
-// function removeItem () {
-//   var del = document.getElementsByClassName('btn-remove')
-//   for (var i = 0; i < del.length; i++) {
-//     del[i].onclick = function () {
-//       var itemDel = this.parentElement
-//       itemDel.style.display = 'none'
-//     }
-//   }
-// }
 
 // Check item is DONE
 list.addEventListener('click', (ev) => {
@@ -91,10 +79,3 @@ myText.addEventListener('keypress', (ev) => {
   // is enter
   if (ev.keyCode === 13) addItem()
 })
-
-var removeList = document.getElementsByClassName('btn-remove')
-for (let i = 0; i < removeList.length; i++) {
-  removeList[i].addEventListener('click', () => {
-    removeList[i].parentElement.style.display = 'none'
-  })
-}
